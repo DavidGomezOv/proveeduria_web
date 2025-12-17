@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprobador Financiero - Sistema de Proveeduría</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/aprobador-financiero.css">
+</head>
+<body>
+    <div class="header">
+        <span id="userRole">Aprobador Financiero</span>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <button class="menu-item active" onclick="showSection('gestion')">
+                Gestión de Solicitudes
+            </button>
+            <button class="menu-item" onclick="showSection('historial')">
+                Historial de Solicitudes
+            </button>
+            <button class="menu-item" onclick="showSection('reportes')">
+                Reportes
+            </button>
+            <button class="menu-item logout" onclick="cerrarSesion()">
+                Cerrar Sesión
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- Sección Gestión de Solicitudes -->
+            <div id="gestion-section" class="content-section active">
+                <div class="solicitudes-container" id="solicitudesContainer">
+                    <p class="text-center">Cargando solicitudes...</p>
+                </div>
+            </div>
+
+            <!-- Sección Historial -->
+            <div id="historial-section" class="content-section">
+                <div class="historial-container" id="historialContainer">
+                    <p class="text-center">Cargando historial...</p>
+                </div>
+            </div>
+
+            <!-- Sección Reportes -->
+            <div id="reportes-section" class="content-section">
+                <div class="reportes-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas id="reporteChart"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="reporte-info">
+                                <h3>Reporte 01</h3>
+                                <p class="reporte-subtitle">Valor Financiero Total por Mes</p>
+
+                                <h4 id="reporteTotalValue" style="font-weight: 600;">Valor Total del Período:
+                                    Cargando...</h4>
+
+                                <div class="filtros-container">
+                                    <h5>Filtrar</h5>
+                                    <button class="btn-filtro active" onclick="filtrarReporte(3)">3 Meses</button>
+                                    <button class="btn-filtro" onclick="filtrarReporte(6)">6 Meses</button>
+                                    <button class="btn-filtro" onclick="filtrarReporte(12)">12 Meses</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reportes-tabs">
+                        <button class="tab-btn active" onclick="cambiarReporte(1)">Reporte 01</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Rechazar -->
+    <div class="modal fade" id="rechazarModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Confirmación de Rechazo</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p id="rechazarTexto">¿Está seguro que desea rechazar la solicitud?</p>
+                    <input type="text" class="form-control" id="comentarioRechazo" placeholder="Comentario">
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-secondary-modal" onclick="cerrarModalRechazo()">Volver</button>
+                    <button type="button" class="btn btn-rechazar-modal" onclick="confirmarRechazo()">Rechazar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Aceptar -->
+    <div class="modal fade" id="aceptarModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Aceptar Solicitud</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Comentario adicional</p>
+                    <input type="text" class="form-control" id="comentarioAceptar" placeholder="Comentario">
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-aceptar-modal" onclick="confirmarAceptar()">Aceptar</button>
+                    <button type="button" class="btn btn-secondary-modal" onclick="cerrarModalAceptar()">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../Script/aprobador-financiero.js"></script>
+</body>
+</html>

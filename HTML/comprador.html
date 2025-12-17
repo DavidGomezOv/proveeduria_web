@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprador - Sistema de Proveeduría</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/comprador.css">
+</head>
+
+<body>
+    <div class="header">
+        <span id="userRole">Comprador</span>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <button class="menu-item active" onclick="showSection('crear')">
+                Crear Solicitud
+            </button>
+            <button class="menu-item" onclick="showSection('historial')">
+                Historial de Solicitudes
+            </button>
+            <button class="menu-item logout" onclick="cerrarSesion()">
+                Cerrar Sesión
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- Sección Crear Solicitud -->
+            <div id="crear-section" class="content-section active">
+                <div class="crear-form-container">
+                    <h3>Crear Solicitud de Compra</h3>
+                    <p class="form-subtitle">Por favor ingrese los productos de la solicitud</p>
+
+                    <form id="crearSolicitudForm">
+                        <div id="productos-list">
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-2 mb-3" id="add-product-btn">
+                            + Agregar Producto
+                        </button>
+
+                        <div class="mb-3 d-flex justify-content-end align-items-center">
+                            <label for="total" class="form-label me-3"
+                                style="font-weight: bold; color: white;">TOTAL:</label>
+                            <input type="text" class="form-control" id="total" readonly
+                                style="width: 150px; font-weight: bold;" placeholder="TOTAL">
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-danger" onclick="cancelarCreacion()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Crear Solicitud</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sección Historial -->
+            <div id="historial-section" class="content-section">
+                <div class="historial-container" id="historialContainer">
+                    <p class="text-center">Cargando historial...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación Crear -->
+    <div class="modal fade" id="confirmarCrearModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Confirmación de Solicitud</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p>¿Está seguro que desea crear la solicitud?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-volver-modal" onclick="cerrarModalConfirmar()">Volver</button>
+                    <button type="button" class="btn btn-aceptar-modal"
+                        onclick="confirmarCrearSolicitud()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Comprobante -->
+    <div class="modal fade" id="comprobanteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Comprobante de Solicitud</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p id="mensajeExito">Solicitud número 001 creada con éxito</p>
+                    <div class="pdf-icon">
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                            <rect x="15" y="10" width="50" height="60" fill="#f5f5f5" stroke="#ccc" stroke-width="2"
+                                rx="3" />
+                            <path d="M 40 15 L 55 15 L 55 30 L 40 15" fill="#e0e0e0" />
+                            <rect x="25" y="45" width="30" height="15" fill="#dc3545" rx="2" />
+                            <text x="40" y="57" text-anchor="middle" fill="white" font-size="10"
+                                font-weight="bold">PDF</text>
+                        </svg>
+                    </div>
+                    <button type="button" class="btn btn-descargar" onclick="descargarPDF()">Descargar PDF</button>
+                    <button type="button" class="btn btn-aceptar-modal"
+                        onclick="cerrarModalComprobante()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Anular -->
+    <div class="modal fade" id="anularModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Confirmación Anulación de Solicitud</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p>¿Está seguro que anular la solicitud?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-volver-modal" onclick="cerrarModalAnular()">Volver</button>
+                    <button type="button" class="btn btn-aceptar-modal" onclick="confirmarAnular()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Detalles -->
+    <div class="modal fade" id="detallesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center" id="detallesTitulo">Detalles de Solicitud</h5>
+                </div>
+                <div class="modal-body" id="detallesContenido">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-volver-modal" onclick="cerrarModalDetalles()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Loading -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-4">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <h5 class="mt-3" id="loadingText">Procesando solicitud...</h5>
+                    <p class="text-muted" id="subLoadingText">Espere un momento, se está enviando la notificación por
+                        correo electrónico.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="../Script/comprador.js"></script>
+</body>
+
+</html>

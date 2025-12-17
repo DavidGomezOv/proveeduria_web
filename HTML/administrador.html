@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador - Sistema de Proveeduría</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/administrador.css">
+</head>
+
+<body>
+    <div class="header">
+        <span id="userRole">Administrador</span>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <button class="menu-item active" onclick="showSection('gestion')">
+                Gestión de Usuarios
+            </button>
+            <button class="menu-item" onclick="showSection('crear')">
+                Crear Usuario
+            </button>
+            <button class="menu-item logout" onclick="cerrarSesion()">
+                Cerrar Sesión
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- Sección Gestión de Usuarios -->
+            <div id="gestion-section" class="content-section active">
+                <div class="users-cards" id="usersCardsContainer">
+                    <p class="text-center">Cargando usuarios...</p>
+                </div>
+            </div>
+
+            <!-- Sección Crear Usuario -->
+            <div id="crear-section" class="content-section">
+                <div class="create-form-container">
+                    <form id="createUserForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="cedula"
+                                    placeholder="Cedula (9 caracteres)" required maxlength="9" required minlength="9">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="apellidos" placeholder="Apellidos" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <input type="email" class="form-control" id="correo" placeholder="Correo" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <input type="password" class="form-control" id="contrasena"
+                                    placeholder="Contraseña (Mín. 4 caracteres)" required minlength="4">
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-2" id="rolRow">
+                            <div class="col-md-6">
+                                <select class="form-select" id="rol" required onchange="checkRolFinanciero()">
+                                    <option value="">Rol</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" id="montoContainer" style="display: none;">
+                                <select class="form-select" id="monto">
+                                    <option value="">Monto</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-4">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-accept w-100">Aceptar</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-cancel w-100"
+                                    onclick="cancelarCreacion()">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="cancelModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center">Cancelar Creación Usuario</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <p>¿Esta seguro que desea cancelar la creación de usuario?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-cancel-modal" onclick="cerrarModalSinLimpiar()">Volver</button>
+                    <button type="button" class="btn btn-confirm-modal"
+                        onclick="confirmarCancelacion()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../Script/administrador.js"></script>
+</body>
+
+</html>
